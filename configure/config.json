@@ -5,7 +5,7 @@
     "imgsz": 640,
     "conf": 0.6,
     "device": "cuda",
-    "queue_size": 120,
+    "queue_size": 121,
     "counting_type": "out",
     "out_region": [
         [
