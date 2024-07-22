@@ -1,0 +1,14 @@
+path: D:/for YOLO/auto_annotation_yolov8/
+
+train: "dataset/train/"
+val: "dataset/val/"
+
+
+
+# Classes
+
+names:
+  0: 'car'
+  1: 'truck'
+  2: 'public_transport'
+  3: 'walker'
