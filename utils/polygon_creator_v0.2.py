@@ -17,31 +17,31 @@ class MainWindow(QMainWindow):
     def initUI(self):
         layout = QGridLayout()
 
-        self.checkbox_stream = QCheckBox("... из потока", self)
+        self.checkbox_stream = QCheckBox("... from stream", self)
         self.checkbox_stream.stateChanged.connect(self.toggle_file_selection)
         layout.addWidget(self.checkbox_stream, 0, 5)
 
-        self.lable_1 = QLabel("Выбор изображения...")
+        self.lable_1 = QLabel("Image selection...")
         layout.addWidget(self.lable_1, 0, 0, 1, 5)
 
         self.file_input = QLineEdit(self)
         layout.addWidget(self.file_input, 1, 0, 1, 5)
 
-        self.browse_button = QPushButton("Обзор", self)
+        self.browse_button = QPushButton("View", self)
         self.browse_button.clicked.connect(self.browse_files)
         layout.addWidget(self.browse_button, 1, 5, 1, 1)
 
-        self.lable_2 = QLabel("Файл конфигурации .json")
+        self.lable_2 = QLabel("Config file .json")
         layout.addWidget(self.lable_2, 2, 0, 1, 6)
 
         self.config_name_input = QLineEdit("config", self)
         layout.addWidget(self.config_name_input, 3, 0, 1, 6)
 
-        self.start_button = QPushButton("Старт", self)
+        self.start_button = QPushButton("Create", self)
         self.start_button.clicked.connect(self.start_processing)
         layout.addWidget(self.start_button, 4, 4, 1, 1)
 
-        self.close_button = QPushButton("Закрыть", self)
+        self.close_button = QPushButton("Close", self)
         self.close_button.clicked.connect(self.close)
         layout.addWidget(self.close_button, 4, 5, 1, 1)
 
@@ -111,8 +111,8 @@ class MainWindow(QMainWindow):
         # Sidebar for additional controls
         sidebar_layout = QVBoxLayout()
 
-        self.checkbox_outer_polygon = QCheckBox("Создание внешнего полигона", self)
-        self.checkbox_inner_polygon = QCheckBox("Создание внутренних полигонов", self)
+        self.checkbox_outer_polygon = QCheckBox("Creating an external polygon", self)
+        self.checkbox_inner_polygon = QCheckBox("Creating internal polygons", self)
         self.checkbox_outer_polygon.setChecked(True)
         self.checkbox_outer_polygon.stateChanged.connect(self.toggle_polygon_checkboxes)
         self.checkbox_inner_polygon.stateChanged.connect(self.toggle_polygon_checkboxes)
@@ -120,8 +120,8 @@ class MainWindow(QMainWindow):
         sidebar_layout.addWidget(self.checkbox_outer_polygon)
         sidebar_layout.addWidget(self.checkbox_inner_polygon)
 
-        self.outer_polygon_label = QLabel("Внешний полигон: []", self)
-        self.inner_polygon_label = QLabel("Внутренние полигоны: []", self)
+        self.outer_polygon_label = QLabel("External polygon: []", self)
+        self.inner_polygon_label = QLabel("Internal polygons: []", self)
         self.outer_polygon_label.setFixedHeight(40)
         self.inner_polygon_label.setFixedHeight(40)
         self.outer_polygon_label.setWordWrap(True)
@@ -130,9 +130,9 @@ class MainWindow(QMainWindow):
         sidebar_layout.addWidget(self.outer_polygon_label)
         sidebar_layout.addWidget(self.inner_polygon_label)
 
-        save_button = QPushButton("Сохранить", self)
+        save_button = QPushButton("Save", self)
         save_button.clicked.connect(self.save_polygons)
-        close_button = QPushButton("Закрыть", self)
+        close_button = QPushButton("Close", self)
         close_button.clicked.connect(self.new_window.close)
 
         sidebar_layout.addWidget(save_button)
@@ -170,7 +170,7 @@ class MainWindow(QMainWindow):
         with open(config_name + ".json", 'w') as f:
             json.dump(config, f, indent=4)
 
-        QMessageBox.information(self, "Сохранение", "Полигоны сохранены в файл конфигурации!")
+        QMessageBox.information(self, "Saving...", "Polygons are saved to a configuration file!")
 
     def image_mousePressEvent(self, event: QMouseEvent):
         if event.button() == Qt.MouseButton.LeftButton:
@@ -243,8 +243,8 @@ class MainWindow(QMainWindow):
         self.update_labels()
 
     def update_labels(self):
-        self.outer_polygon_label.setText(f"Внешний полигон: {self.polygons['outer'] if self.polygons['outer'] else '[]'}")
-        self.inner_polygon_label.setText(f"Внутренние полигоны: {self.polygons['inner'] if self.polygons['inner'] else '[]'}")
+        self.outer_polygon_label.setText(f"External polygon: {self.polygons['outer'] if self.polygons['outer'] else '[]'}")
+        self.inner_polygon_label.setText(f"Internal polygons: {self.polygons['inner'] if self.polygons['inner'] else '[]'}")
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
