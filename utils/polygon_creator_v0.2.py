@@ -9,7 +9,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle("PolyCreator v1.0")
+        self.setWindowTitle("PolyCreator v0.2")
         self.setGeometry(100, 100, 300, 150)
 
         self.initUI()
