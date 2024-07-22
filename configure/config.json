@@ -1,11 +1,11 @@
 {
     "cam_ip": "http://61.211.241.239/nphMotionJpeg?Resolution=640x640&Quality=Standard",
     "test_vid": "D:/for YOLO/Root111/domodedovo_test.mp4",
-    "model_path": "s_860i_m50-0,67(0,75).pt",
+    "model_path": "models/best_2000i_m50-0,87(0,93).pt",
     "imgsz": 640,
     "conf": 0.6,
     "device": "cuda",
-    "queue_size": 121,
+    "queue_size": 120,
     "counting_type": "out",
     "out_region": [
         [

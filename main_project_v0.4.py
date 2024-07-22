@@ -9,7 +9,7 @@ from queue import Queue
 from threading import Thread, Event
 
 # Инициализируем модель(-и) и видеопоток(-и)
-with open("config.json", 'r', encoding='utf-8') as f:
+with open("configure/config.json", 'r', encoding='utf-8') as f:
     config = json.load(f)
 
 torch.device(config["device"])
