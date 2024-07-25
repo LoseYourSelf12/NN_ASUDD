@@ -1,7 +1,7 @@
 import websocket
 import json
 
-WS = 'ws://194.87.111.128:1031'
+WS = 'ws://194.87.111.128:1031/'
 
 con = websocket.create_connection(WS)
 
