@@ -127,6 +127,7 @@ def main_loop(stop_event):
     cv2.destroyAllWindows()
     stop_event.set()  # Signal other threads to stop
 
+
 async def websocket_handler():
     uri = "ws://194.87.111.128:1031"
     global fill_event
