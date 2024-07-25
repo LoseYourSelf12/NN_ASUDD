@@ -4,8 +4,7 @@ import torch
 import numpy as np
 import datetime
 import time
-import asyncio
-import websockets
+import websocket
 from ultralytics import YOLO
 from queue import Queue
 from threading import Thread, Event
@@ -127,28 +126,24 @@ def main_loop(stop_event):
     cv2.destroyAllWindows()
     stop_event.set()  # Signal other threads to stop
 
-
-async def websocket_handler():
-    uri = "ws://194.87.111.128:1031"
+def on_message(ws, message):
     global fill_event
+    data = json.loads(message)
+    print(f"Received message: {data}")
 
-    async with websockets.connect(uri) as websocket:
-        while True:
-            message = await websocket.recv()
-            data = json.loads(message)
-            print(f"Received message: {data}")
+    if 'taktNo' in data:
+        taktNo = data['taktNo']
+        print(f"taktNo: {taktNo}")
 
-            if 'taktNo' in data:
-                taktNo = data['taktNo']
-                print(f"taktNo: {taktNo}")
-
-                if taktNo == 14:
-                    fill_event.set()
-                else:
-                    fill_event.clear()
+        if taktNo == 14:
+            fill_event.set()
+        else:
+            fill_event.clear()
 
 def websocket_thread():
-    asyncio.run(websocket_handler())
+    ws = websocket.WebSocketApp("ws://194.87.111.128:1031",
+                                on_message=on_message)
+    ws.run_forever()
 
 stop_event = Event()
 t1 = Thread(target=main_loop, args=(stop_event,))
