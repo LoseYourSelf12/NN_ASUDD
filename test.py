@@ -6,6 +6,7 @@ import datetime
 import time
 import asyncio
 import websockets
+import requests
 from ultralytics import YOLO
 from queue import Queue
 from threading import Thread, Event
@@ -42,7 +43,7 @@ def process_queue():
         frame_boxes = process_frame(frame=frame)
         result_buffer[count_queue] = frame_boxes
         count_queue += 1
-    asyncio.run(send_program_no())  # Отправляем номер программы после обработки очереди
+    send_program_no()  # Отправляем номер программы после обработки очереди
     return result_buffer
 
 def process_frame(frame):
@@ -127,16 +128,22 @@ def main_loop(stop_event):
     cv2.destroyAllWindows()
     stop_event.set()  # Signal other threads to stop
 
-async def send_program_no():
-    global prog_no
-    uri = "ws://localhost:8000/ws"  # Адрес вебсокета
+def send_program_no():
+    global program_no
+    uri = "http://localhost:8000/update_prog_no"  # Адрес HTTP-эндпоинта
 
-    prog_no = (prog_no + 1) % 4  # Обновляем номер программы
+    program_no = (program_no + 1) % 4  # Обновляем номер программы
 
-    message = json.dumps({"progNo": prog_no})
-    async with websockets.connect(uri) as websocket:
-        await websocket.send(message)
-        print(f"Sent program number: {prog_no}")
+    data = {"progNo": program_no}
+    try:
+        response = requests.post(uri, json=data)
+        if response.status_code == 200:
+            print(f"Sent program number: {program_no}")
+        else:
+            print(f"Failed to send program number: {response.status_code}, {response.text}")
+    except Exception as e:
+        print(f"Error sending program number: {e}")
+
 
 async def websocket_handler():
     uri = "ws://localhost:8000/ws"
@@ -162,7 +169,7 @@ async def websocket_handler():
 def websocket_thread():
     asyncio.run(websocket_handler())
 
-prog_no = 0  # Инициализируем номер программы
+program_no = 1  # Инициализируем номер программы
 
 stop_event = Event()
 t1 = Thread(target=main_loop, args=(stop_event,))
