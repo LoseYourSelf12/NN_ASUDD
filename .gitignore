@@ -1,0 +1,19 @@
+__pycache__/
+*.pyc
+*.pyo
+
+.venv/
+.env
+
+.idea/
+.vscode/
+
+*.log
+*.pid
+
+# Docker-related files
+docker-compose.yml
+Dockerfile
+
+boxes.json
+results.json
