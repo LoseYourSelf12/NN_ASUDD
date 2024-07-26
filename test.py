@@ -4,7 +4,8 @@ import torch
 import numpy as np
 import datetime
 import time
-import websocket
+import asyncio
+import websockets
 from ultralytics import YOLO
 from queue import Queue
 from threading import Thread, Event
@@ -17,7 +18,7 @@ torch.device(config["device"])
 
 model = YOLO(config["model_path"])
 
-cap = cv2.VideoCapture(config["cam_ip"])  # "cam_ip" or "test_vid"
+cap = cv2.VideoCapture(config["test_vid"])  # "cam_ip" or "test_vid"
 
 # Инициализируем маску внешнего полигона
 mask = np.zeros((config["imgsz"], config["imgsz"]), dtype=np.uint8)
@@ -26,7 +27,7 @@ background = cv2.bitwise_not(mask)
 background = cv2.cvtColor(background, cv2.COLOR_GRAY2BGR)
 
 # Инициализируем очередь фреймов
-frame_queue = Queue(maxsize=config["queue_size"])
+frame_queue = Queue()  # Убираем ограничение на максимальный размер очереди
 detect_event = Event()
 fill_event = Event()
 
@@ -41,6 +42,7 @@ def process_queue():
         frame_boxes = process_frame(frame=frame)
         result_buffer[count_queue] = frame_boxes
         count_queue += 1
+    asyncio.run(send_program_no())  # Отправляем номер программы после обработки очереди
     return result_buffer
 
 def process_frame(frame):
@@ -60,7 +62,7 @@ def detect_loop(stop_event):
             print("Start detecting")
             res = process_queue()
             detect_event.clear()
-            continue
+            print("Detection finished.")
 
 def process_and_write_results():
     global res
@@ -113,10 +115,9 @@ def main_loop(stop_event):
         im0 = cv2.add(im0, background)
 
         if fill_event.is_set():
-            if frame_queue.full():
-                detect_event.set()
-            if not frame_queue.full() and not detect_event.is_set():
-                frame_queue.put_nowait(im0)
+            frame_queue.put_nowait(im0)
+            print("Added frame to queue.")
+            detect_event.set()
 
         cv2.imshow("test", im0)
         if cv2.waitKey(1) & 0xFF == ord("q"):
@@ -126,24 +127,42 @@ def main_loop(stop_event):
     cv2.destroyAllWindows()
     stop_event.set()  # Signal other threads to stop
 
-def on_message(ws, message):
+async def send_program_no():
+    global prog_no
+    uri = "ws://localhost:8000/ws"  # Адрес вебсокета
+
+    prog_no = (prog_no + 1) % 4  # Обновляем номер программы
+
+    message = json.dumps({"progNo": prog_no})
+    async with websockets.connect(uri) as websocket:
+        await websocket.send(message)
+        print(f"Sent program number: {prog_no}")
+
+async def websocket_handler():
+    uri = "ws://localhost:8000/ws"
     global fill_event
-    data = json.loads(message)
-    print(f"Received message: {data}")
 
-    if 'taktNo' in data:
-        taktNo = data['taktNo']
-        print(f"taktNo: {taktNo}")
+    async with websockets.connect(uri) as websocket:
+        while True:
+            message = await websocket.recv()
+            data = json.loads(message)
+            print(f"Received message: {data}")
 
-        if taktNo == 14:
-            fill_event.set()
-        else:
-            fill_event.clear()
+            if 'taktNo' in data:
+                taktNo = data['taktNo']
+                print(f"taktNo: {taktNo}")
+
+                if taktNo == 4:
+                    fill_event.set()
+                    print("Fill event set.")
+                else:
+                    fill_event.clear()
+                    print("Fill event cleared.")
 
 def websocket_thread():
-    ws = websocket.WebSocketApp("ws://194.87.111.128:1031",
-                                on_message=on_message)
-    ws.run_forever()
+    asyncio.run(websocket_handler())
+
+prog_no = 0  # Инициализируем номер программы
 
 stop_event = Event()
 t1 = Thread(target=main_loop, args=(stop_event,))
