@@ -146,6 +146,14 @@ def in_poly(results, start_time, end_time):
     with open("results/in_region_results.json", "w", encoding="utf-8") as f:
         json.dump(result, f)
 
+def draw_polygons(image):
+    # Рисование внешнего полигона
+    cv2.polylines(image, [np.array(config["out_region"])], isClosed=True, color=(0, 255, 0), thickness=2)
+    # Рисование внутренних полигонов
+    for in_region in config["in_regions"]:
+        cv2.polylines(image, [np.array(in_region)], isClosed=True, color=(255, 0, 0), thickness=2)
+    return image
+
 def main_loop(stop_event):
     global frame_queue, detect_event, start_time
     test_tick = 0
@@ -162,6 +170,7 @@ def main_loop(stop_event):
         im0 = cv2.resize(im0, (config["imgsz"], config["imgsz"]))
         im0 = cv2.bitwise_and(im0, im0, mask=mask)
         im0 = cv2.add(im0, background)
+        im0 = draw_polygons(im0)
 
         if frame_queue.full():
             detect_event.set()
