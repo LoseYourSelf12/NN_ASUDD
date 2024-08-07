@@ -13,10 +13,13 @@ from threading import Thread, Event
 with open("configure/config.json", 'r', encoding='utf-8') as f:
     config = json.load(f)
 
+# Выбор девайса - CUDA / CPU
 torch.device(config["device"])
 
+# Модель НС
 model = YOLO(config["model_path"])
 
+# Захват видео 
 cap = cv2.VideoCapture(config["cam_ip"])  # "cam_ip" or "test_vid"
 
 # Инициализируем маску внешнего полигона
@@ -34,6 +37,10 @@ fill_event = Event()
 res = None
 
 def process_queue():
+    """
+    Обрабатывает каждый кадр в очереди функцией process_frame.
+    Записывает в буффер результатов для дальнейшего посчета.
+    """
     result_buffer = {}
     count_queue = 0
     while not frame_queue.empty():
@@ -44,6 +51,10 @@ def process_queue():
     return result_buffer
 
 def process_frame(frame):
+    """
+    Обрабатывает кходной кадр, возвращает координат BB.
+    Параметры в configure/config.json
+    """
     result = model.track(frame,
                          conf=config["conf"],
                          imgsz=config["imgsz"],
@@ -53,6 +64,10 @@ def process_frame(frame):
     return result[0].boxes.xywh.tolist()
 
 def detect_loop(stop_event):
+    """
+    Цикл проверки для запуска потока детекции.
+    Проверяет состояние очереди и состояние ивента.
+    """
     global frame_queue, detect_event, res
 
     while not stop_event.is_set():
@@ -63,6 +78,9 @@ def detect_loop(stop_event):
             continue
 
 def process_and_write_results():
+    """
+    Записывает резуьтаты, если имеются
+    """
     global res
     while True:
         if res:
@@ -80,6 +98,9 @@ def process_and_write_results():
         time.sleep(1)
 
 def out_poly(results):
+    """
+    Простой подсчет среднего количества объектов во внешнем полигоне
+    """
     total_boxes = 0
     mean_boxes = 0
     for key in results.keys():
@@ -93,9 +114,18 @@ def out_poly(results):
         json.dump(res, f)
 
 def in_poly(results):
+    """
+    Подсчет во внутренних полигонах
+    """
     pass
 
 def main_loop(stop_event):
+    """
+    Основной цикл
+    Считывает кадры с потока/видео
+    Запускает ивенты для детекции/наполнения очереди
+    Наполняет очередь
+    """
     global frame_queue, detect_event, fill_event
     test_tick = 0
 
@@ -124,9 +154,12 @@ def main_loop(stop_event):
     
     cap.release()
     cv2.destroyAllWindows()
-    stop_event.set()  # Signal other threads to stop
+    stop_event.set()  # Signal other threads to stop !!! не работает(
 
 def on_message(ws, message):
+    """
+    Обратная связь с вебсокетом
+    """
     global fill_event
     data = json.loads(message)
     print(f"Received message: {data}")
@@ -156,7 +189,7 @@ t3.start()
 t4.start()
 
 t1.join()
-stop_event.set()  # Ensure detect_loop stops if it hasn't already
+stop_event.set()
 t2.join()
 t3.join()
 t4.join()
