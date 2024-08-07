@@ -81,9 +81,9 @@ class Event:
     def clear(self):
         self.state = False
 
-def process_and_write_results():
+def process_and_write_results(stop_event):
     global res
-    while True:
+    while not stop_event.is_set():
         if res:
             print("Writing boxes data...")
             with open("results/boxes.json", 'w', encoding='utf-8') as f:
@@ -190,7 +190,7 @@ def main_loop(stop_event):
 stop_event = Event()
 t1 = Thread(target=main_loop, args=(stop_event,))
 t2 = Thread(target=detect_loop, args=(stop_event,), daemon=True)
-t3 = Thread(target=process_and_write_results, daemon=True)
+t3 = Thread(target=process_and_write_results, args=(stop_event,), daemon=True)
 t1.start()
 t2.start()
 t3.start()
