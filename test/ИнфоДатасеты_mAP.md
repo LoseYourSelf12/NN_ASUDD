@@ -49,19 +49,3 @@
 - **mAP@50-95**: усреднённый mAP, вычисленный по нескольким порогам **IoU** от 0.5 до 0.95 с шагом 0.05.
 
 Более подробная информация по различным метрикам YOLO и интерпритации их результатов описана в **Шаги обучения моделей**.
-
-## Обозначения элементов
-
-1. **IoU (Intersection over Union):**  
-   ![IoU](iou.png)
-
-2. **Precision (Точность):**  
-   ![Precision](precision.png)
-
-3. **Recall (Полнота):**  
-   ![Recall](recall.png)
-
-4. **mAP (Mean Average Precision):**  
-   ![mAP](utils/map.png)
-
-
