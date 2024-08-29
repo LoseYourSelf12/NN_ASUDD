@@ -42,7 +42,7 @@
    ![Recall](recall.png)
 
 4. **mAP (Mean Average Precision):**  
-   ![mAP](map.png)
+   ![mAP](utils/map.png)
 
 ---
 
