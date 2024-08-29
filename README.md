@@ -1,3 +1,4 @@
+
 # Распределение изображений по классам в датасетах ImageNet и COCO
 
 ## ImageNet
@@ -31,35 +32,17 @@
 
 ### Обозначения элементов
 
-1. **IoU (Intersection over Union):**
-   \[
-   \text{IoU} = \frac{\text{Area of Intersection}}{\text{Area of Union}}
-   \]
-   - **Area of Intersection** — площадь пересечения предсказанной и истинной областей.
-   - **Area of Union** — объединённая площадь предсказанной и истинной областей.
+1. **IoU (Intersection over Union):**  
+   ![IoU](iou.png)
 
-2. **Precision (Точность):**
-   \[
-   \text{Precision} = \frac{TP}{TP + FP}
-   \]
-   - **TP (True Positives)** — корректно предсказанные положительные примеры.
-   - **FP (False Positives)** — некорректно предсказанные положительные примеры.
+2. **Precision (Точность):**  
+   ![Precision](precision.png)
 
-3. **Recall (Полнота):**
-   \[
-   \text{Recall} = \frac{TP}{TP + FN}
-   \]
-   - **FN (False Negatives)** — положительные примеры, которые модель не смогла предсказать.
+3. **Recall (Полнота):**  
+   ![Recall](recall.png)
 
-4. **AP (Average Precision):**
-   - Усреднённая точность при различных уровнях полноты.
-
-5. **mAP (Mean Average Precision):**
-   \[
-   \text{mAP} = \frac{1}{N} \sum_{i=1}^{N} AP_i
-   \]
-   - \(N\) — общее количество классов.
-   - \(AP_i\) — средняя точность для класса \(i\).
+4. **mAP (Mean Average Precision):**  
+   ![mAP](map.png)
 
 ---
 
