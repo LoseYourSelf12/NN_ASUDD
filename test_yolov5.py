@@ -7,6 +7,8 @@ import time
 from queue import Queue
 from threading import Thread, Event
 
+from traffic_sender import send_traffic_data
+
 # Загрузка конфигурации
 with open("configure/config.json", 'r', encoding='utf-8') as f:
     config = json.load(f)
@@ -113,6 +115,14 @@ def out_poly(results, start_time, end_time):
     for frame_boxes in results.values():
         total_boxes += len(frame_boxes)
     mean_boxes = total_boxes / len(results)
+
+    # Пример данных для отправки
+    straight_percentage = 70
+    left_percentage = 20
+    right_percentage = 10
+
+    # Отправляем данные на сервер
+    send_traffic_data(straight_percentage, left_percentage, right_percentage)
 
     res = {
         "start_time": start_time.isoformat(),
