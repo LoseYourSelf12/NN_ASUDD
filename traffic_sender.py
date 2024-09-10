@@ -1,7 +1,7 @@
 import requests
 
 # Адрес сервера статистики
-server_url = "http://localhost:1038/setComm"  # Заменить на реальный URL
+server_url = "http://www.sistema-complex.ru/"  # Заменить на реальный URL
 
 # Функция для отправки данных детектора
 def send_traffic_data(straight, left, right, det_no=1):
