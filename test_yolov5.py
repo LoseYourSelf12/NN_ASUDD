@@ -6,6 +6,7 @@ import datetime
 import time
 from queue import Queue
 from threading import Thread, Event
+from deep_sort_realtime.deepsort_tracker import DeepSort
 
 from traffic_sender import send_traffic_data
 
@@ -17,6 +18,9 @@ device = torch.device(config["device"])
 
 # Загрузка модели YOLOv5
 model = torch.hub.load("ultralytics/yolov5", 'yolov5s')
+
+# Инициализация DeepSORT
+tracker = DeepSort(max_age=30, n_init=2, nms_max_overlap=1.0, max_cosine_distance=0.2)
 
 cap = cv2.VideoCapture(config["cam_ip"])  # "cam_ip" or "test_vid"
 
@@ -36,6 +40,18 @@ res = None
 start_time = None
 end_time = None
 
+# Линии направлений (из конфигурации)
+# directions = config["directions"]
+
+# Функция для проверки пересечения направления
+def check_direction_crossing(previous_position, current_position, direction_line):
+    x1, y1 = previous_position
+    x2, y2 = current_position
+    line_start, line_end = direction_line
+    
+    # Проверка пересечения линии направления
+    return cv2.lineTest(np.array([line_start, line_end]), (x1, y1), (x2, y2))
+
 def process_queue():
     result_buffer = {}
     count_queue = 0
@@ -47,14 +63,29 @@ def process_queue():
     return result_buffer
 
 def process_frame(frame):
+    # Получаем предсказания YOLOv5
     results = model(frame)
-    bbox_xywh = []
+
+    # Извлекаем боксы
+    detections = []
     for *xyxy, conf, cls in results.xyxy[0]:
         if conf >= config["conf"]:
             x1, y1, x2, y2 = map(int, xyxy)
-            bbox_xywh.append([x1, y1, x2 - x1, y2 - y1])
+            bbox = [x1, y1, x2 - x1, y2 - y1]
+            detections.append(bbox)
     
-    return bbox_xywh
+    # Трекинг объектов с использованием DeepSORT
+    tracked_objects = tracker.update_tracks(detections, frame=frame)
+    tracked_bboxes = []
+    
+    for track in tracked_objects:
+        if not track.is_confirmed():
+            continue
+        track_id = track.track_id
+        bbox = track.to_ltwh()
+        tracked_bboxes.append((track_id, bbox))
+
+    return tracked_bboxes
 
 def detect_loop(stop_event):
     global frame_queue, detect_event, res, start_time, end_time
@@ -66,6 +97,39 @@ def detect_loop(stop_event):
             res = process_queue()
             detect_event.clear()
             continue
+
+def line_intersection(p1, p2, box_center):
+    """
+    Проверяем пересечение центра bbox с линией (p1, p2)
+    """
+    x1, y1 = p1
+    x2, y2 = p2
+    x, y = box_center
+    return ((y - y1) * (x2 - x1)) == ((y2 - y1) * (x - x1))
+
+def count_directions(tracked_bboxes, previous_coords, lines):
+    """
+    Функция для подсчета машин по направлениям
+    """
+    directions = {'straight': 0, 'left': 0, 'right': 0}
+
+    for track_id, bbox in tracked_bboxes:
+        x, y, w, h = bbox
+        center = (x + w // 2, y + h // 2)
+
+        # Получаем предыдущие координаты объекта
+        prev_center = previous_coords.get(track_id)
+
+        # Если есть предыдущие координаты, проверяем пересечения
+        if prev_center:
+            for direction, line in lines.items():
+                if line_intersection(line[0], line[1], center) and not line_intersection(line[0], line[1], prev_center):
+                    directions[direction] += 1
+
+        # Обновляем координаты для объекта
+        previous_coords[track_id] = center
+
+    return directions
 
 class Event:
     def __init__(self, event_name="", event_type="", event_duration=0, event_state=False):
@@ -85,17 +149,29 @@ class Event:
 
 def process_and_write_results(stop_event):
     global res
+    previous_coords = {}  # Для хранения предыдущих координат объектов
+
+    # Определяем линии для подсчета направлений
+    lines = {
+        'straight': [(100, 200), (300, 400)],  # Заменить на реальные координаты линий
+        'left': [(400, 500), (600, 700)],
+        'right': [(200, 300), (500, 600)]
+    }
+
     while not stop_event.is_set():
         if res:
-            print("Writing boxes data...")
-            with open("results/boxes.json", 'w', encoding='utf-8') as f:
-                json.dump(res, f)
-            print("Done\nWriting result data...")
-            # if config["counting_type"] == "out":
-            out_poly(res, start_time, end_time)
-            # elif config["counting_type"] == "in":
-            in_poly(res, start_time, end_time)
-            print("Done")
+            print("Processing results...")
+
+            # Подсчет направлений движения
+            directions = count_directions(res, previous_coords, lines)
+
+            # Вывод результатов
+            print("Направления:", directions)
+
+            # Отправка данных на сервер
+            send_traffic_data(straight=directions['straight'], left=directions['left'], right=directions['right'])
+
+            # Сброс результатов
             res = {}
             
         time.sleep(1)
