@@ -2,3 +2,5 @@
 yolov5s.pt
 
 results/
+
+__pycache__/
