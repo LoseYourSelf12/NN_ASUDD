@@ -3,23 +3,20 @@ import json
 import time
 
 # Адрес сервера статистики (RestStateAddr)
-server_url = "http://localhost:1038/setComm"  # Заменить на реальный URL
+server_url = "http://www.sistema-complex.ru/api/getmontrafstatus?"  # Заменить на реальный URL
 
 # Функция для отправки данных детектора
 def send_traffic_data(straight, left, right, det_no=1):
     # Формирование данных в формате JSON
-    data = {
-        "DetNo": det_no,
-        "CommandStr": f"tcpa: TRAFFIC_DATA Straight: {straight}%, Left: {left}%, Right: {right}%",
-    }
+    data = ""
     
     try:
         # Отправляем POST-запрос на сервер
-        response = requests.post(server_url, json=data)
+        response = requests.post(server_url, data=data)
         
         # Проверяем ответ от сервера
         if response.status_code == 200:
-            print("Данные успешно отправлены:", data)
+            print("Данные успешно отправлены:", response.json())
         else:
             print(f"Ошибка при отправке данных. Статус код: {response.status_code}")
     
