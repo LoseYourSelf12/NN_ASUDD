@@ -4,14 +4,13 @@ import cv2
 from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QFileDialog, QLabel, QCheckBox, QLineEdit, QVBoxLayout, QWidget, QHBoxLayout, QMessageBox, QGridLayout
 from PyQt6.QtGui import QPixmap, QImage, QMouseEvent, QPainter, QPen
 from PyQt6.QtCore import Qt, QPoint
+import numpy as np
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-
-        self.setWindowTitle("PolyCreator v0.2")
+        self.setWindowTitle("PolyCreator v0.3")
         self.setGeometry(100, 100, 300, 150)
-
         self.initUI()
 
     def initUI(self):
@@ -34,7 +33,7 @@ class MainWindow(QMainWindow):
         self.lable_2 = QLabel("Config file .json")
         layout.addWidget(self.lable_2, 2, 0, 1, 6)
 
-        self.config_name_input = QLineEdit("config", self)
+        self.config_name_input = QLineEdit("configure/config", self)
         layout.addWidget(self.config_name_input, 3, 0, 1, 6)
 
         self.start_button = QPushButton("Create", self)
@@ -104,7 +103,6 @@ class MainWindow(QMainWindow):
         self.image_label = QLabel(self)
         self.image_label.setPixmap(pixmap)
         self.image_label.mousePressEvent = self.image_mousePressEvent
-        self.image_label.mouseMoveEvent = self.image_mouseMoveEvent
 
         layout.addWidget(self.image_label)
 
@@ -113,22 +111,28 @@ class MainWindow(QMainWindow):
 
         self.checkbox_outer_polygon = QCheckBox("Creating an external polygon", self)
         self.checkbox_inner_polygon = QCheckBox("Creating internal polygons", self)
+        self.checkbox_line_direction = QCheckBox("Draw line with direction", self)
         self.checkbox_outer_polygon.setChecked(True)
         self.checkbox_outer_polygon.stateChanged.connect(self.toggle_polygon_checkboxes)
         self.checkbox_inner_polygon.stateChanged.connect(self.toggle_polygon_checkboxes)
 
         sidebar_layout.addWidget(self.checkbox_outer_polygon)
         sidebar_layout.addWidget(self.checkbox_inner_polygon)
+        sidebar_layout.addWidget(self.checkbox_line_direction)
 
         self.outer_polygon_label = QLabel("External polygon: []", self)
         self.inner_polygon_label = QLabel("Internal polygons: []", self)
+        self.line_label = QLabel("Lines with directions: []", self)
         self.outer_polygon_label.setFixedHeight(40)
         self.inner_polygon_label.setFixedHeight(40)
+        self.line_label.setFixedHeight(40)
         self.outer_polygon_label.setWordWrap(True)
         self.inner_polygon_label.setWordWrap(True)
+        self.line_label.setWordWrap(True)
 
         sidebar_layout.addWidget(self.outer_polygon_label)
         sidebar_layout.addWidget(self.inner_polygon_label)
+        sidebar_layout.addWidget(self.line_label)
 
         save_button = QPushButton("Save", self)
         save_button.clicked.connect(self.save_polygons)
@@ -145,10 +149,11 @@ class MainWindow(QMainWindow):
         self.new_window.setCentralWidget(container)
         self.new_window.show()
 
-        # Initialize polygon creation variables
+        # Initialize polygon and line creation variables
         self.drawing_polygon = False
         self.current_polygon = []
-        self.polygons = {"outer": None, "inner": []}
+        self.current_line = []
+        self.polygons = {"outer": None, "inner": [], "lines_with_directions": []}
         self.update_labels()
 
     def toggle_polygon_checkboxes(self):
@@ -166,85 +171,135 @@ class MainWindow(QMainWindow):
             config["out_region"] = self.polygons["outer"]
         if self.polygons["inner"]:
             config["in_regions"] = self.polygons["inner"]
+        if self.polygons["lines_with_directions"]:
+            config["lines_with_directions"] = self.polygons["lines_with_directions"]
 
         with open(config_name + ".json", 'w') as f:
             json.dump(config, f, indent=4)
 
-        QMessageBox.information(self, "Saving...", "Polygons are saved to a configuration file!")
+        QMessageBox.information(self, "Saving...", "Polygons and lines are saved to a configuration file!")
 
     def image_mousePressEvent(self, event: QMouseEvent):
+        pos = event.position().toPoint()
+        
         if event.button() == Qt.MouseButton.LeftButton:
-            pos = event.position().toPoint()
-            self.current_polygon.append([pos.x(), pos.y()])
-            self.update_image()
-        elif event.button() == Qt.MouseButton.MiddleButton:
-            if self.current_polygon:
-                self.current_polygon.pop()
+            # Рисование полигонов
+            if self.checkbox_outer_polygon.isChecked() or self.checkbox_inner_polygon.isChecked():
+                self.drawing_polygon = True
+                self.current_polygon.append([pos.x(), pos.y()])
+                self.update_image()  # Обновление изображения после каждого клика
+            
+            # Рисование линии
+            elif self.checkbox_line_direction.isChecked():
+                if len(self.current_line) < 2:
+                    self.current_line.append([pos.x(), pos.y()])
+                else:
+                    p1, p2 = self.current_line
+                    third_point = [pos.x(), pos.y()]
+                    mid_point = [(p1[0] + p2[0]) // 2, (p1[1] + p2[1]) // 2]
+
+                    # Рассчитываем вектор направления перпендикуляра
+                    line_vec = np.array([p2[0] - p1[0], p2[1] - p1[1]])
+                    perp_vec = np.array([-line_vec[1], line_vec[0]])
+                    perp_vec = perp_vec / np.linalg.norm(perp_vec)
+
+                    # Рассчитываем точку для стрелки
+                    direction_point = mid_point + perp_vec * 50
+
+                    # Добавляем отрезок с направлением
+                    self.current_line.append([pos.x(), pos.y()])
+                    self.polygons["lines_with_directions"].append({
+                        "line": [p1, p2],
+                        "third_point": third_point, 
+                        "direction": [int(direction_point[0]), int(direction_point[1])]
+                    })
+                    self.current_line = []
                 self.update_image()
+
         elif event.button() == Qt.MouseButton.RightButton:
-            if self.current_polygon:
+            # Завершение рисования полигона
+            if self.drawing_polygon:
                 if self.checkbox_outer_polygon.isChecked():
                     self.polygons["outer"] = self.current_polygon
-                    self.checkbox_outer_polygon.setChecked(False)
                 elif self.checkbox_inner_polygon.isChecked():
                     self.polygons["inner"].append(self.current_polygon)
                 self.current_polygon = []
+                self.drawing_polygon = False
+                self.update_labels()
                 self.update_image()
-            self.update_labels()
+            
+            # Завершение рисования линии и добавление её в config
+            elif self.checkbox_line_direction.isChecked():
+                if len(self.current_line) == 2:
+                    p1, p2 = self.current_line
+                    mid_point = [(p1[0] + p2[0]) // 2, (p1[1] + p2[1]) // 2]
+                    third_point = [pos.x(), pos.y()]
 
-    def image_mouseMoveEvent(self, event: QMouseEvent):
-        pass  # Can be implemented if needed for real-time drawing feedback
+                    # Рассчитываем направление
+                    line_vec = np.array([p2[0] - p1[0], p2[1] - p1[1]])
+                    perp_vec = np.array([-line_vec[1], line_vec[0]])
+                    perp_vec = perp_vec / np.linalg.norm(perp_vec)
 
-    def update_image(self):
-        # Clear the image
-        img = self.original_img.copy()
-        painter = QPainter()
-        q_img = QImage(img.data, img.shape[1], img.shape[0], QImage.Format.Format_RGB888).rgbSwapped()
-        painter.begin(q_img)
-        pen_outer = QPen(Qt.GlobalColor.red)
-        pen_outer.setWidth(2)
-        pen_inner = QPen(Qt.GlobalColor.green)
-        pen_inner.setWidth(2)
+                    direction_point = mid_point + perp_vec * 50
 
-        # Draw all the polygons
-        if self.polygons["outer"]:
-            painter.setPen(pen_outer)
-            for i in range(len(self.polygons["outer"])):
-                p1 = QPoint(self.polygons["outer"][i][0], self.polygons["outer"][i][1])
-                p2 = QPoint(self.polygons["outer"][(i + 1) % len(self.polygons["outer"])][0], self.polygons["outer"][(i + 1) % len(self.polygons["outer"])][1])
-                painter.drawLine(p1, p2)
-            # Add polygon number label
-            first_point = self.polygons["outer"][0]
-            painter.drawText(first_point[0], first_point[1], "1")
+                    # Добавляем линию и направление в config
+                    self.polygons["lines_with_directions"].append({
+                        "line": [p1, p2],
+                        "third_point": third_point,
+                        "direction": [int(direction_point[0]), int(direction_point[1])]
+                    })
+                    self.current_line = []
+                    self.update_image()
 
-        for index, polygon in enumerate(self.polygons["inner"]):
-            painter.setPen(pen_inner)
-            for i in range(len(polygon)):
-                p1 = QPoint(polygon[i][0], polygon[i][1])
-                p2 = QPoint(polygon[(i + 1) % len(polygon)][0], polygon[(i + 1) % len(polygon)][1])
-                painter.drawLine(p1, p2)
-            # Add polygon number label
-            first_point = polygon[0]
-            painter.drawText(first_point[0], first_point[1], str(index + 2))
-
-        # Draw the current polygon being created
-        if self.current_polygon:
-            if self.checkbox_outer_polygon.isChecked():
-                painter.setPen(pen_outer)
-            elif self.checkbox_inner_polygon.isChecked():
-                painter.setPen(pen_inner)
-            for i in range(len(self.current_polygon)):
-                p1 = QPoint(self.current_polygon[i][0], self.current_polygon[i][1])
-                p2 = QPoint(self.current_polygon[(i + 1) % len(self.current_polygon)][0], self.current_polygon[(i + 1) % len(self.current_polygon)][1])
-                painter.drawLine(p1, p2)
-
-        painter.end()
-        self.image_label.setPixmap(QPixmap.fromImage(q_img))
-        self.update_labels()
 
     def update_labels(self):
-        self.outer_polygon_label.setText(f"External polygon: {self.polygons['outer'] if self.polygons['outer'] else '[]'}")
-        self.inner_polygon_label.setText(f"Internal polygons: {self.polygons['inner'] if self.polygons['inner'] else '[]'}")
+        self.outer_polygon_label.setText(f"External polygon: {self.polygons['outer']}")
+        self.inner_polygon_label.setText(f"Internal polygons: {self.polygons['inner']}")
+        self.line_label.setText(f"Lines with directions: {self.polygons['lines_with_directions']}")
+
+    def update_image(self):
+        img_copy = self.original_img.copy()
+
+        # Рисование внешнего полигона
+        if self.polygons["outer"]:
+            pts = np.array(self.polygons["outer"], np.int32)
+            pts = pts.reshape((-1, 1, 2))
+            cv2.polylines(img_copy, [pts], isClosed=True, color=(0, 0, 255), thickness=2)  # Red outer polygon
+
+        # Рисование внутренних полигонов
+        for polygon in self.polygons["inner"]:
+            pts = np.array(polygon, np.int32)
+            pts = pts.reshape((-1, 1, 2))
+            cv2.polylines(img_copy, [pts], isClosed=True, color=(0, 255, 0), thickness=2)  # Green inner polygons
+
+        # Рисование линий с направлениями
+        for line_data in self.polygons["lines_with_directions"]:
+            line = line_data["line"]
+            direction = line_data["direction"]
+            cv2.line(img_copy, tuple(line[0]), tuple(line[1]), (255, 255, 0), 2)  # Бирюзовая линия
+            cv2.arrowedLine(img_copy, ((line[0][0] + line[1][0]) // 2, (line[0][1] + line[1][1]) // 2),
+                            tuple(direction), (255, 255, 0), 2)  # Стрелка для направления
+
+        # Рисование текущего полигона
+        if self.current_polygon:
+            pts = np.array(self.current_polygon, np.int32)
+            pts = pts.reshape((-1, 1, 2))
+            if self.checkbox_outer_polygon.isChecked():
+                cv2.polylines(img_copy, [pts], isClosed=False, color=(0, 0, 255), thickness=2)  # Красный (внешний)
+            elif self.checkbox_inner_polygon.isChecked():
+                cv2.polylines(img_copy, [pts], isClosed=False, color=(0, 255, 0), thickness=2)  # Зеленый (внутренний)
+
+        # Рисование текущей линии
+        if len(self.current_line) == 1:
+            p1 = self.current_line[0]
+            cv2.circle(img_copy, tuple(p1), 5, (255, 255, 0), -1)  # Точка начала линии
+
+        # Обновление QImage
+        height, width, channel = img_copy.shape
+        bytes_per_line = 3 * width
+        q_img = QImage(img_copy.data, width, height, bytes_per_line, QImage.Format.Format_RGB888).rgbSwapped()
+        pixmap = QPixmap.fromImage(q_img)
+        self.image_label.setPixmap(pixmap)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
