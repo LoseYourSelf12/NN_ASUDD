@@ -17,12 +17,12 @@ with open("configure/config.json", 'r', encoding='utf-8') as f:
 device = torch.device(config["device"])
 
 # Загрузка модели YOLOv5
-model = torch.hub.load("ultralytics/yolov5", 'yolov5s')
+model = torch.hub.load('asudneyro/models/yolov5-master/', 'custom', 'asudneyro/models/best_2000i_m50-0,87(0,93).pt', source='local')
 
 # Инициализация DeepSORT
 tracker = DeepSort(max_age=30, n_init=2, nms_max_overlap=1.0, max_cosine_distance=0.2)
 
-cap = cv2.VideoCapture(config["cam_ip"])  # "cam_ip" or "test_vid"
+cap = cv2.VideoCapture(config["test_vid"])  # "cam_ip" or "test_vid"
 
 # Инициализация маски внешнего полигона
 mask = np.zeros((config["imgsz"], config["imgsz"]), dtype=np.uint8)
@@ -111,7 +111,7 @@ def count_directions(tracked_bboxes, previous_coords, lines):
     """
     Функция для подсчета машин по направлениям
     """
-    directions = {'straight': 0, 'left': 0, 'right': 0}
+    directions = {}
 
     for track_id, bbox in tracked_bboxes:
         x, y, w, h = bbox
@@ -152,17 +152,21 @@ def process_and_write_results(stop_event):
     previous_coords = {}  # Для хранения предыдущих координат объектов
 
     # Определяем линии для подсчета направлений
-    lines = {
-        'straight': [(100, 200), (300, 400)],  # Заменить на реальные координаты линий
-        'left': [(400, 500), (600, 700)],
-        'right': [(200, 300), (500, 600)]
-    }
+    lines = {}
+    # lines = {
+    #     'straight': [(100, 200), (300, 400)],  # Заменить на реальные координаты линий
+    #     'left': [(400, 500), (600, 700)],
+    #     'right': [(200, 300), (500, 600)]
+    # }
+    for line_num, line in enumerate(config['lines_with_directions'], start=1):
+        lines[f'direction_{line_num}'] = line['line']
 
     while not stop_event.is_set():
         if res:
             print("Processing results...")
 
             # Подсчет направлений движения
+            print(res)
             directions = count_directions(res, previous_coords, lines)
 
             # Вывод результатов
@@ -238,6 +242,7 @@ def draw_polygons(image):
     # Рисование внутренних полигонов
     for in_region in config["in_regions"]:
         cv2.polylines(image, [np.array(in_region)], isClosed=True, color=(255, 0, 0), thickness=2)
+    
     return image
 
 def main_loop(stop_event):
