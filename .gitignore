@@ -4,3 +4,9 @@ yolov5s.pt
 results/
 
 __pycache__/
+
+test_vid/
+
+models/
+
+yolov5-master/

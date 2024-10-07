@@ -1,7 +1,7 @@
-path: D:/for YOLO/auto_annotation_yolov8/
+path: E:/dataset_all_classes/
 
-train: "dataset/train/"
-val: "dataset/val/"
+train: "train/"
+val: "val/"
 
 
 
