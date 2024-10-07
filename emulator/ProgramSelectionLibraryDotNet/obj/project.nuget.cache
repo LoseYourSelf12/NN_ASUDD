@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "2csm6XRa4dSw9KKFexu9V61mcw/wOAau8VCsv6jh21gFsiMYQTdD1WB5UsEY9AMcTftLXfy9SxHfb6W9FkEwRw==",
+  "success": true,
+  "projectFilePath": "D:\\work\\ProgramsSelectionEmulator\\ProgramSelectionLibraryDotNet\\ProgramSelectionLibraryDotNet.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\user\\.nuget\\packages\\ssh.net\\2023.0.0\\ssh.net.2023.0.0.nupkg.sha512",
+    "C:\\Users\\user\\.nuget\\packages\\sshnet.security.cryptography\\1.3.0\\sshnet.security.cryptography.1.3.0.nupkg.sha512"
+  ],
+  "logs": []
+}

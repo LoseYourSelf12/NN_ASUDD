@@ -1,0 +1,188 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\Work\\ProgramsSelectionEmulator\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{24E4BBEA-0D9E-44C5-894A-CB309999405D}|ProgramSelectionWorkerService\\ProgramSelectionWorkerService.csproj|d:\\work\\programsselectionemulator\\programselectionworkerservice\\worker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{24E4BBEA-0D9E-44C5-894A-CB309999405D}|ProgramSelectionWorkerService\\ProgramSelectionWorkerService.csproj|solutionrelative:programselectionworkerservice\\worker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1EE62A63-CE7B-46D5-B2AC-B0966147F2F4}|..\\TLparamsCalc\\LibraryTLCalc\\LibraryTLCalc.csproj|d:\\work\\tlparamscalc\\librarytlcalc\\classcrossroad.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{24E4BBEA-0D9E-44C5-894A-CB309999405D}|ProgramSelectionWorkerService\\ProgramSelectionWorkerService.csproj|d:\\work\\programsselectionemulator\\programselectionworkerservice\\programselectionworkerservice.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{24E4BBEA-0D9E-44C5-894A-CB309999405D}|ProgramSelectionWorkerService\\ProgramSelectionWorkerService.csproj|solutionrelative:programselectionworkerservice\\programselectionworkerservice.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FF03C817-4315-48CE-8250-0FC9EDFF53E5}|ProgramSelectionLibraryDotNet\\ProgramSelectionLibraryDotNet.csproj|d:\\work\\programsselectionemulator\\programselectionlibrarydotnet\\programselection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FF03C817-4315-48CE-8250-0FC9EDFF53E5}|ProgramSelectionLibraryDotNet\\ProgramSelectionLibraryDotNet.csproj|solutionrelative:programselectionlibrarydotnet\\programselection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{24E4BBEA-0D9E-44C5-894A-CB309999405D}|ProgramSelectionWorkerService\\ProgramSelectionWorkerService.csproj|d:\\work\\programsselectionemulator\\programselectionworkerservice\\reflection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{24E4BBEA-0D9E-44C5-894A-CB309999405D}|ProgramSelectionWorkerService\\ProgramSelectionWorkerService.csproj|solutionrelative:programselectionworkerservice\\reflection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{24E4BBEA-0D9E-44C5-894A-CB309999405D}|ProgramSelectionWorkerService\\ProgramSelectionWorkerService.csproj|d:\\work\\programsselectionemulator\\programselectionworkerservice\\filelogging.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{24E4BBEA-0D9E-44C5-894A-CB309999405D}|ProgramSelectionWorkerService\\ProgramSelectionWorkerService.csproj|solutionrelative:programselectionworkerservice\\filelogging.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{24E4BBEA-0D9E-44C5-894A-CB309999405D}|ProgramSelectionWorkerService\\ProgramSelectionWorkerService.csproj|d:\\work\\programsselectionemulator\\programselectionworkerservice\\workwithhttp.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{24E4BBEA-0D9E-44C5-894A-CB309999405D}|ProgramSelectionWorkerService\\ProgramSelectionWorkerService.csproj|solutionrelative:programselectionworkerservice\\workwithhttp.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{24E4BBEA-0D9E-44C5-894A-CB309999405D}|ProgramSelectionWorkerService\\ProgramSelectionWorkerService.csproj|d:\\work\\programsselectionemulator\\programselectionworkerservice\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{24E4BBEA-0D9E-44C5-894A-CB309999405D}|ProgramSelectionWorkerService\\ProgramSelectionWorkerService.csproj|solutionrelative:programselectionworkerservice\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FF03C817-4315-48CE-8250-0FC9EDFF53E5}|ProgramSelectionLibraryDotNet\\ProgramSelectionLibraryDotNet.csproj|d:\\work\\programsselectionemulator\\programselectionlibrarydotnet\\ftpworking.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FF03C817-4315-48CE-8250-0FC9EDFF53E5}|ProgramSelectionLibraryDotNet\\ProgramSelectionLibraryDotNet.csproj|solutionrelative:programselectionlibrarydotnet\\ftpworking.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{24E4BBEA-0D9E-44C5-894A-CB309999405D}|ProgramSelectionWorkerService\\ProgramSelectionWorkerService.csproj|d:\\work\\programsselectionemulator\\programselectionworkerservice\\workwithtcp.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{24E4BBEA-0D9E-44C5-894A-CB309999405D}|ProgramSelectionWorkerService\\ProgramSelectionWorkerService.csproj|solutionrelative:programselectionworkerservice\\workwithtcp.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 1,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedHeight": 486,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ClassCrossRoad.cs",
+              "DocumentMoniker": "D:\\Work\\TLparamsCalc\\LibraryTLCalc\\ClassCrossRoad.cs",
+              "RelativeDocumentMoniker": "..\\TLparamsCalc\\LibraryTLCalc\\ClassCrossRoad.cs",
+              "ToolTip": "D:\\Work\\TLparamsCalc\\LibraryTLCalc\\ClassCrossRoad.cs",
+              "RelativeToolTip": "..\\TLparamsCalc\\LibraryTLCalc\\ClassCrossRoad.cs",
+              "ViewState": "AQIAALcIAAAAAAAAAAASwLoIAAAWAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-29T07:52:40.374Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ProgramSelectionWorkerService.csproj",
+              "DocumentMoniker": "D:\\Work\\ProgramsSelectionEmulator\\ProgramSelectionWorkerService\\ProgramSelectionWorkerService.csproj",
+              "RelativeDocumentMoniker": "ProgramSelectionWorkerService\\ProgramSelectionWorkerService.csproj",
+              "ToolTip": "D:\\Work\\ProgramsSelectionEmulator\\ProgramSelectionWorkerService\\ProgramSelectionWorkerService.csproj",
+              "RelativeToolTip": "ProgramSelectionWorkerService\\ProgramSelectionWorkerService.csproj",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2024-08-28T10:09:28.143Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Worker.cs",
+              "DocumentMoniker": "D:\\Work\\ProgramsSelectionEmulator\\ProgramSelectionWorkerService\\Worker.cs",
+              "RelativeDocumentMoniker": "ProgramSelectionWorkerService\\Worker.cs",
+              "ToolTip": "D:\\Work\\ProgramsSelectionEmulator\\ProgramSelectionWorkerService\\Worker.cs",
+              "RelativeToolTip": "ProgramSelectionWorkerService\\Worker.cs",
+              "ViewState": "AQIAACQDAAAAAAAAAAAAADIDAABVAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-28T07:41:14.221Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Reflection.cs",
+              "DocumentMoniker": "D:\\Work\\ProgramsSelectionEmulator\\ProgramSelectionWorkerService\\Reflection.cs",
+              "RelativeDocumentMoniker": "ProgramSelectionWorkerService\\Reflection.cs",
+              "ToolTip": "D:\\Work\\ProgramsSelectionEmulator\\ProgramSelectionWorkerService\\Reflection.cs",
+              "RelativeToolTip": "ProgramSelectionWorkerService\\Reflection.cs",
+              "ViewState": "AQIAAEYAAAAAAAAAAAAuwFwAAAAMAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-28T07:41:14.37Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "D:\\Work\\ProgramsSelectionEmulator\\ProgramSelectionWorkerService\\appsettings.json",
+              "RelativeDocumentMoniker": "ProgramSelectionWorkerService\\appsettings.json",
+              "ToolTip": "D:\\Work\\ProgramsSelectionEmulator\\ProgramSelectionWorkerService\\appsettings.json",
+              "RelativeToolTip": "ProgramSelectionWorkerService\\appsettings.json",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAA1AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-08-28T07:41:18.41Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ProgramSelection.cs",
+              "DocumentMoniker": "D:\\Work\\ProgramsSelectionEmulator\\ProgramSelectionLibraryDotNet\\ProgramSelection.cs",
+              "RelativeDocumentMoniker": "ProgramSelectionLibraryDotNet\\ProgramSelection.cs",
+              "ToolTip": "D:\\Work\\ProgramsSelectionEmulator\\ProgramSelectionLibraryDotNet\\ProgramSelection.cs",
+              "RelativeToolTip": "ProgramSelectionLibraryDotNet\\ProgramSelection.cs",
+              "ViewState": "AQIAANEFAAAAAAAAAAASwNQFAAATAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-28T07:41:18.41Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "FTPWorking.cs",
+              "DocumentMoniker": "D:\\Work\\ProgramsSelectionEmulator\\ProgramSelectionLibraryDotNet\\FTPWorking.cs",
+              "RelativeDocumentMoniker": "ProgramSelectionLibraryDotNet\\FTPWorking.cs",
+              "ToolTip": "D:\\Work\\ProgramsSelectionEmulator\\ProgramSelectionLibraryDotNet\\FTPWorking.cs",
+              "RelativeToolTip": "ProgramSelectionLibraryDotNet\\FTPWorking.cs",
+              "ViewState": "AQIAAAMAAAAAAAAAAAAlwBMAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-28T07:41:18.41Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "WorkWithTCP.cs",
+              "DocumentMoniker": "D:\\Work\\ProgramsSelectionEmulator\\ProgramSelectionWorkerService\\WorkWithTCP.cs",
+              "RelativeDocumentMoniker": "ProgramSelectionWorkerService\\WorkWithTCP.cs",
+              "ToolTip": "D:\\Work\\ProgramsSelectionEmulator\\ProgramSelectionWorkerService\\WorkWithTCP.cs",
+              "RelativeToolTip": "ProgramSelectionWorkerService\\WorkWithTCP.cs",
+              "ViewState": "AQIAAAwAAAAAAAAAAAAqwA4AAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-28T07:41:18.414Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "FileLogging.cs",
+              "DocumentMoniker": "D:\\Work\\ProgramsSelectionEmulator\\ProgramSelectionWorkerService\\FileLogging.cs",
+              "RelativeDocumentMoniker": "ProgramSelectionWorkerService\\FileLogging.cs",
+              "ToolTip": "D:\\Work\\ProgramsSelectionEmulator\\ProgramSelectionWorkerService\\FileLogging.cs",
+              "RelativeToolTip": "ProgramSelectionWorkerService\\FileLogging.cs",
+              "ViewState": "AQIAAB4AAAAAAAAAAAAAwC8AAABBAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-28T07:41:18.414Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "WorkWithHTTP.cs",
+              "DocumentMoniker": "D:\\Work\\ProgramsSelectionEmulator\\ProgramSelectionWorkerService\\WorkWithHTTP.cs",
+              "RelativeDocumentMoniker": "ProgramSelectionWorkerService\\WorkWithHTTP.cs",
+              "ToolTip": "D:\\Work\\ProgramsSelectionEmulator\\ProgramSelectionWorkerService\\WorkWithHTTP.cs",
+              "RelativeToolTip": "ProgramSelectionWorkerService\\WorkWithHTTP.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABEAAAAjAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-28T07:41:18.414Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
