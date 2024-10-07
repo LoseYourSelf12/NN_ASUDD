@@ -1,0 +1,119 @@
+{
+    "cam_ip": "rtsp://admin:admin@10.5.10.30:554/cam/realmonitor?channel=2&subtype=1",
+    "cam_ip_2": "http://67.53.46.161:65123/mjpg/video.mjpg",
+    "test_vid": "asudneyro/test_vid/test_vid_2.mp4",
+    "model_path": "asudneyro/models/yolov5s.pt",
+    "imgsz": 640,
+    "conf": 0.6,
+    "device": "cuda",
+    "queue_size": 20,
+    "counting_type": "out",
+    "out_region": [
+        [
+            317,
+            149
+        ],
+        [
+            397,
+            373
+        ],
+        [
+            91,
+            327
+        ],
+        [
+            91,
+            140
+        ],
+        [
+            234,
+            90
+        ]
+    ],
+    "in_regions": [
+        [
+            [
+                195,
+                200
+            ],
+            [
+                332,
+                247
+            ],
+            [
+                209,
+                307
+            ]
+        ],
+        [
+            [
+                157,
+                271
+            ],
+            [
+                119,
+                199
+            ],
+            [
+                185,
+                167
+            ]
+        ],
+        [
+            [
+                237,
+                172
+            ],
+            [
+                281,
+                196
+            ],
+            [
+                215,
+                216
+            ]
+        ]
+    ],
+    "lines_with_directions": [
+        {
+            "line": [
+                [
+                    173,
+                    429
+                ],
+                [
+                    488,
+                    265
+                ]
+            ],
+            "third_point": [
+                410,
+                462
+            ],
+            "direction": [
+                353,
+                391
+            ]
+        },
+        {
+            "line": [
+                [
+                    521,
+                    424
+                ],
+                [
+                    308,
+                    553
+                ]
+            ],
+            "third_point": [
+                303,
+                422
+            ],
+            "direction": [
+                388,
+                445
+            ]
+        }
+    ]
+}
