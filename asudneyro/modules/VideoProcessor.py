@@ -7,7 +7,7 @@ import logging
 from modules.config import LoadConfig
 
 class VideoProcessor:
-    def __init__(self, video_source=0, show_event_state=False):
+    def __init__(self, video_source=0, camera_id=0, show_event_state=False):
         """
         Инициализация класса обработки видео
         :param video_source: источник видеопотока (камера или видеофайл)
@@ -15,6 +15,7 @@ class VideoProcessor:
         """
         self.config = LoadConfig()
         self.video_source = video_source
+        self.camera_id = camera_id
         self.show_event_state = show_event_state
         self.running = False
         
@@ -75,64 +76,65 @@ class VideoProcessor:
         """
         Захват видеопотока и передача кадров на обработку.
         """
-        self.logger.info("Запуск захвата видео.")
+        self.logger.info(f"Запуск захвата видео. {self.camera_id}")
         cap = cv2.VideoCapture(self.video_source)
         if not cap.isOpened():
-            self.logger.error(f"Не удалось открыть видеоисточник {self.video_source}")
+            self.logger.error(f"Не удалось открыть видеоисточник {self.video_source} {self.camera_id}")
             return
         
         while self.running:
             ret, frame = cap.read()
             if not ret:
-                self.logger.warning("Не удалось считать кадр, остановка.")
+                self.logger.warning(f"Не удалось считать кадр, остановка. {self.camera_id}")
                 break
 
             # Помещаем кадр в очередь для дальнейшей обработки
             if not self.frame_queue.full():
                 self.frame_queue.put(frame)
             else:
-                self.logger.warning("Очередь кадров переполнена!")
+                self.logger.warning(f"Очередь кадров переполнена! {self.camera_id}")
 
             time.sleep(0.03)  # Ограничение FPS (опционально)
 
         cap.release()
-        self.logger.info("Завершение захвата видео.")
+        self.logger.info(f"Завершение захвата видео. {self.camera_id}")
 
     def process_frames(self):
         """
         Обработка кадров из очереди: предобработка и отрисовка.
         Реакция на событие детекции.
         """
-        self.logger.info("Запуск обработки кадров.")
+        self.logger.info(f"Запуск обработки кадров. {self.camera_id}")
         while self.running:
             if not self.frame_queue.empty():
                 frame = self.frame_queue.get()
 
                 # Проверяем, нужно ли выполнять детекцию
                 if self.detection_event.is_set():
-                    self.logger.info("Детекция активирована. Обрабатываем кадры.")
+                    self.logger.info(f"Детекция активирована. Обрабатываем кадры. {self.camera_id}")
                     processed_frame = self.img_processing(frame)
                 else:
-                    self.logger.info("Детекция неактивна. Пропускаем кадры.")
+                    self.logger.info(f"Детекция неактивна. Пропускаем кадры. {self.camera_id}")
+                    time.sleep(0.49)  # Ожидаем запуск детекции
 
                 if self.show_event_state and self.detection_event.is_set():
-                    cv2.imshow('Processed Frame', processed_frame)
+                    cv2.imshow(f'Processed Frame - {self.camera_id}', processed_frame)
 
             time.sleep(0.01)  # Для разгрузки процессора
-        self.logger.info("Завершение обработки кадров.")
+        self.logger.info(f"Завершение обработки кадров. {self.camera_id}")
 
     def start(self):
         """
         Запуск потоков захвата видео и обработки кадров.
         """
         self.running = True
-        self.capture_thread = threading.Thread(target=self.video_capture)
-        self.processing_thread = threading.Thread(target=self.process_frames)
+        self.capture_thread = threading.Thread(target=self.video_capture, daemon=True)
+        self.processing_thread = threading.Thread(target=self.process_frames, daemon=True)
 
         self.capture_thread.start()
         self.processing_thread.start()
 
-        self.logger.info("Потоки захвата видео и обработки кадров запущены.")
+        self.logger.info(f"Потоки захвата видео и обработки кадров запущены. {self.camera_id}")
 
     def stop(self):
         """
@@ -145,4 +147,4 @@ class VideoProcessor:
         # Закрываем все окна OpenCV
         cv2.destroyAllWindows()
 
-        self.logger.info("Потоки успешно завершены.")
+        self.logger.info(f"Потоки успешно завершены. {self.camera_id}")
