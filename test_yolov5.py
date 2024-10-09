@@ -8,7 +8,7 @@ from queue import Queue
 from threading import Thread, Event
 from deep_sort_realtime.deepsort_tracker import DeepSort
 
-from traffic_sender import send_traffic_data
+# from traffic_sender import send_traffic_data
 
 # Загрузка конфигурации
 with open("configure/config.json", 'r', encoding='utf-8') as f:
