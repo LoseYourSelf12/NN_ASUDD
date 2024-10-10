@@ -62,7 +62,7 @@ if __name__ == "__main__":
             vp.start()
 
         # Запуск сервера в отдельном потоке
-        server_thread = threading.Thread(target=run_server)
+        server_thread = threading.Thread(target=run_server, daemon=True)
         server_thread.start()
 
         while True:
@@ -70,3 +70,5 @@ if __name__ == "__main__":
 
     except KeyboardInterrupt:
         print("Завершение работы...")
+        server_thread.join()     
+        

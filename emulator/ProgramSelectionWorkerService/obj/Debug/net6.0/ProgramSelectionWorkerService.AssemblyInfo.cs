@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ProgramSelectionWorkerService")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+633d5fae418031ead3dec9596fbd08a42ca32878")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bf3eafcf736a24f69b9aa44ebd1aed40d730c1b5")]
 [assembly: System.Reflection.AssemblyProductAttribute("ProgramSelectionWorkerService")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ProgramSelectionWorkerService")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

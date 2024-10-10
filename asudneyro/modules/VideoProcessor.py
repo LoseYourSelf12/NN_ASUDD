@@ -23,7 +23,7 @@ class VideoProcessor:
         self.detection_event = threading.Event()
 
         # Очередь кадров для передачи между потоками
-        self.frame_queue = queue.Queue(maxsize=1000)
+        self.frame_queue = queue.Queue(maxsize=15)
 
         # Маска и фон для предобработки
         self.mask = np.zeros((self.config.config['imgsz'], self.config.config['imgsz']), dtype=np.uint8)
@@ -94,7 +94,7 @@ class VideoProcessor:
             else:
                 self.logger.warning(f"Очередь кадров переполнена! {self.camera_id}")
 
-            time.sleep(0.03)  # Ограничение FPS (опционально)
+            time.sleep(0.1)  # Ограничение FPS (опционально)
 
         cap.release()
         self.logger.info(f"Завершение захвата видео. {self.camera_id}")
@@ -115,7 +115,7 @@ class VideoProcessor:
                     processed_frame = self.img_processing(frame)
                 else:
                     self.logger.info(f"Детекция неактивна. Пропускаем кадры. {self.camera_id}")
-                    time.sleep(0.49)  # Ожидаем запуск детекции
+                    # time.sleep(0.49)  # Ожидаем запуск детекции
 
                 if self.show_event_state and self.detection_event.is_set():
                     cv2.imshow(f'Processed Frame - {self.camera_id}', processed_frame)
